@@ -40,8 +40,6 @@
 </head>
 <body>
 
-  <a id="go-back" href="/">Go Back</a>
-
   <div id="container">
     <h1>04 - Circular movement</h1>
     <canvas id="canvas"></canvas>
@@ -62,16 +60,57 @@
     canvas.style.setProperty('width', CANVAS_WIDTH + 'px')
     canvas.style.setProperty('height', CANVAS_HEIGHT + 'px')
 
-    const ctx = canvas.getContext('2d')
+    const context = canvas.getContext('2d')
 
 
     // ------- Render Loop -------
-    const drawFrame = () => {
+    const drawFrame = (ts) => {
         ts /= 1000
 
    // clear our canvas contents
-   ctx.clearRect(0, 0, canvas.width, canvas.height)
+   context.clearRect(0, 0, canvas.width, canvas.height)
 
+   const circleX = canvas.width / 2
+   const circleY = canvas.height  / 2
+   const circleRadius = 200 + Math.sin (ts * 2)  * 200
+
+   const circleStartAngle = 0
+   const circleEndAngle = Math.PI * 2
+   const circleCounterClockwise = false
+
+   context.fillStyle='blue';
+   context.beginPath();
+   context.arc(circleX, circleY, circleRadius, circleStartAngle, circleEndAngle, circleCounterClockwise); 
+   context.stroke();
+
+
+   const fillStyle = 'orange'
+   const angle = ts * 2; 
+   //circleX - middle of the circle, Math.cos(angle) -defines angle from -1 to 1, 
+   const moveX = circleX + Math.cos(angle) * circleRadius
+   const moveY = circleY + Math.sin(angle) * circleRadius
+
+
+
+
+
+   context.beginPath()
+   context.arc(moveX, moveY, 40 + Math.cos(ts * 2) * 10, circleStartAngle, circleEndAngle, circleCounterClockwise)
+   context.fill();
+
+
+   const moveX2 = circleX + Math.cos(angle + Math.PI) * circleRadius
+   const moveY2 = circleY + Math.sin(angle + Math.PI) * circleRadius
+   context.fillStyle = "tomato"
+
+
+   context.beginPath()
+   context.arc(moveX2, moveY2, 40 + Math.cos(ts * 2) * 20, circleStartAngle, circleEndAngle, circleCounterClockwise)
+   context.fill();
+
+
+
+   
 
 
    requestAnimationFrame(drawFrame)
