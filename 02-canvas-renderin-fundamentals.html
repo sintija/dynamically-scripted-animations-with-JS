@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>02 - Canvas rendering fundamentals</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: sans-serif;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 1.5em;
+      margin-bottom: 1em;
+    }
+
+    #go-back {
+      position: fixed;
+      top: 1em;
+      left: 1em;
+    }
+
+    #canvas {
+      box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+    }
+  </style>
+
+</head>
+
+<body>
+  <div id="container">
+    <h1>02 - HTML5 canvas rendering fundamentals</h1>
+    <canvas id="canvas"></canvas>
+  </div>
+
+  <script>
+    // ------- Initialization -------
+    const CANVAS_WIDTH = 512
+    const CANVAS_HEIGHT = 512
+
+    const canvas = document.getElementById('canvas')
+
+    canvas.width = CANVAS_WIDTH *  devicePixelRatio
+    canvas.height = CANVAS_HEIGHT *  devicePixelRatio
+
+    canvas.style.setProperty('width', CANVAS_WIDTH + 'px')
+    canvas.style.setProperty('height', CANVAS_HEIGHT + 'px')
+
+    const context = canvas.getContext('2d')
+
+
+    //Image and video ensure it is loaded first 
+    const image = new Image()
+    const video = document.createElement('video')
+
+//First load an image, one the image is loaded, we then  load the video, once both are rendered, kick off the rendering loop
+    image.onload = function()  {
+      video.onloadedmetadata = function()  {
+        requestAnimationFrame(drawFrame); 
+
+      }
+      video.src = "https://youtu.be/yhS9LnDoo_w"
+    }
+
+    image.src = 'https://en.wikipedia.org/wiki/Rabbit#/media/File:Oryctolagus_cuniculus_Rcdo.jpg'
+
+
+    //Render Loop 
+    const drawFrame = (ts) => {
+      ts /= 1000
+
+
+
+    //clear command
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    
+
+      //Creating the gradient 
+      const gradient = context.createLinearGradient(100, 100, 150,100)
+      gradient.addColorStop(0, 'red')
+      gradient.addColorStop(1, 'green')
+       //Rectgangle 
+      context.fillStyle = gradient
+      context.strokeStyle='blue'
+      context.lineWidth= 5;
+
+      context.fillRect(100, 100, 50, 50)
+      context.strokeRect(100, 100, 50, 50)
+
+
+      //Circles 
+      const circleX = 125 
+      const circleY = 225
+      const circleRadius = 50 ////in pixels
+      const startAngle = 0
+      const endAngle = Math.PI * 2 //Full circle is π * 2 
+
+      context.fillStyle = 'orange';
+
+
+      context.beginPath();
+      context.arc(circleX, circleY, circleRadius, startAngle, endAngle);
+      context.fill();
+      //context.closePath();
+      
+
+      //drawing the line 
+      context.lineWidth = 10
+      context.strokeStyle = 'brown'
+
+
+      context.beginPath()
+      context.moveTo(125, 350)
+      context.lineTo(175, 350)
+      context.lineTo(175, 330)
+      context.closePath()
+      context.stroke()
+      context.fill()
+
+      //Quadratic curve
+      context.lineWidth = 2
+      context.strokeStyle = 'red'
+      context.beginPath()
+      context.moveTo(125, 450)
+      context.quadraticCurveTo(150, 400, 175, 450)
+      context.stroke()
+      
+
+      //bezier curve 
+      context.lineWidth = 2
+      context.strokeStyle = 'green'
+      context.beginPath()
+
+      const startX = 250
+      const startY = 450
+
+      const cp1x = startX + 50
+      const cp1y = startY - 50 + ts * 20
+      const cp2x = startX + 100
+      const cp2y = startY - 50
+      const endX = startX + 150 
+      const endY = startY
+
+
+
+      context.moveTo(startX, startY)
+      context.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, endX, endY);
+      context.stroke()
+      
+
+
+      //Text
+      context.fillStyle = "red"
+     context.font='50px sans-serif';
+    context.fillText('hi my name is sin', 250, 100);
+
+
+    //Image 
+    context.drawImage(Image, 250, 170, image.naturalWidth * 0.25, image.naturalHeight * 25);
+
+    //Video 
+   // context.drawImage(video, 250, 250, video.videoWidth * 0.25, video.videoHeight * 0.25s);
+
+    
+
+      
+    }
+    requestAnimationFrame(drawFrame)
+  </script>
+
+</body>
+
+</html>

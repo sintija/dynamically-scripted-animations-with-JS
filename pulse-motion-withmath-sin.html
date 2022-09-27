@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>03 - Create a pulsing motion with Math.sin()</title>
+
+  <style>
+      
+    * { margin: 0; padding: 0; }
+
+    body {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: sans-serif;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 1.5em;
+      margin-bottom: 1em;
+    }
+
+    #go-back {
+      position: fixed;
+      top: 1em;
+      left: 1em;
+    }
+
+    #canvas {
+      box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+  </style>
+
+</head>
+<body>
+
+  <div id="container">
+    <h1>03 - Create a pulsing motion with Math.sin()</h1>
+    <canvas id="canvas"></canvas>
+  </div>
+
+  <script>
+
+    // ------- Initialization -------
+    const CANVAS_WIDTH = 512
+    const CANVAS_HEIGHT = 512
+
+    const canvas = document.getElementById('canvas')
+
+    const dpr = devicePixelRatio
+    canvas.width = CANVAS_WIDTH * devicePixelRatio
+    canvas.height = CANVAS_HEIGHT * devicePixelRatio
+
+    canvas.style.setProperty('width', CANVAS_WIDTH + 'px')
+    canvas.style.setProperty('height', CANVAS_HEIGHT + 'px')
+
+    const context = canvas.getContext('2d')
+
+    // ------- Render Loop -------
+
+    const drawFrame = (ts) => {
+      ts /= 1000
+
+      // clear our canvas contents
+      context.clearRect(0, 0, canvas.width, canvas.height)
+
+      const circleX = canvas.width / 2
+      const circleY = canvas.height / 2
+
+  
+      const circleRadius = 100 + Math.sin(ts * 2) * 50 + Math.cos(ts * 1) * 0.05
+      const circleStartAngle = 0
+      const circleEndAngle = Math.PI * 2
+      const circleCounterClockwise = false
+
+      context.fillStyle='blue'
+      context.beginPath()
+      context.arc(circleX, circleY, circleRadius, circleStartAngle, circleEndAngle, circleCounterClockwise)
+      context.fill()
+
+
+      requestAnimationFrame(drawFrame)
+    }
+
+    requestAnimationFrame(drawFrame)
+
+  </script>
+  
+</body>
+</html>
